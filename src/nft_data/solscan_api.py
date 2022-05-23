@@ -1,13 +1,16 @@
-import requests
 import pandas as pd
+import requests
 
 
 def get_top_collections_df():
     """Use solscan api to get top collections by 7day volume"""
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
+    }
 
     # Pull data
     url = "https://api.solscan.io/collection?sortBy=volume7day&offset=0&limit=1000"
-    data = requests.get(url).json()["data"]
+    data = requests.get(url, headers=headers).json()["data"]
     df = pd.DataFrame(data)
 
     # Unpack
@@ -30,6 +33,9 @@ def get_collection_trades_df(collectionId: str) -> pd.DataFrame:
     Returns:
         pd.DataFrame
     """
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
+    }
     url = f"https://api.solscan.io/collection/trade?collectionId={collectionId}&offset=0&limit=10000"
-    df = pd.DataFrame(requests.get(url).json()["data"])
+    df = pd.DataFrame(requests.get(url, headers=headers).json()["data"])
     return df
